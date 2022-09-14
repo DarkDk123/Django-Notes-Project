@@ -1,0 +1,20 @@
+databases:
+  - name: NotesApp
+    databaseName: notesapp
+    user: darkdk
+
+services:
+  - type: web
+    name: NotesApp
+    env: python
+    buildCommand: "./server/build.sh"
+    startCommand: "gunicorn server.NotesAPI.NotesAPI.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: NotesApp
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
