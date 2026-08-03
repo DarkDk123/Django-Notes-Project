@@ -89,14 +89,9 @@ WSGI_APPLICATION = "NotesAPI.wsgi.application"
 
 DATABASES = {
     "default": dj_database_url.config(
-		default= os.environ.get('DATABASE_URL'),
-        NAME= 'notesapp',
-        USER= 'darkdk',
-        PASSWORD= os.environ.get('DB_PASS'),
-        PORT= '5432',
-        HOST= 'localhost',
-		conn_max_age = 600
-	)
+        default=os.environ.get("DATABASE_URL", "sqlite:///db.sqlite3"),
+        conn_max_age=600,
+    )
 }
 
 
@@ -143,7 +138,11 @@ if not DEBUG:
 
     # Turn on WhiteNoise storage backend that takes care of compressing static files
     # and creating unique names for each version so they can safely be cached forever.
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+    STORAGES = {
+        "staticfiles": {
+            "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"
+        },
+    }
 	
 
 STATICFILES_DIRS = [
